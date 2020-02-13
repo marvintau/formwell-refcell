@@ -1,26 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Refcell, {Evaluatable} from './Refcell';
+import {genCascadedNameEntries} from './nameGenerate';
+
+const nameEntries = genCascadedNameEntries(100);
+console.log(nameEntries);
+
+const table = [
+  {desc: 'example', value: 'exmaple1', children: []},
+  {desc: 'example2', value: 'example2', children: []}
+]
+
+const evalColumnDict = {
+  借方 : 'md',
+  贷方 : 'mc',
+  期初 : 'mb',
+  期末 : 'me'
 }
 
-export default App;
+export default () => {
+  return <div className="App">
+    <Evaluatable {...{table, referredTable:nameEntries, pathColumn:'desc', evalColumnDict}}>
+      {table.map((rec, i) => <Refcell key={i} path={[i]} disabled={false} />)}
+    </Evaluatable>
+  </div>
+}
